@@ -5,12 +5,10 @@ import java.util.concurrent.BlockingQueue;
 class File {
     String type;
     int size;
-
     public File(String type, int size) {
         this.type = type;
         this.size = size;
     }
-
     @Override
     public String toString() {
         return "File{" +
@@ -24,11 +22,9 @@ class FileGenerator extends Thread {
     private final BlockingQueue<File> fileQueue;
     private final Random random = new Random();
     private static final String[] FILE_TYPES = {"XML", "JSON", "XLS"};
-
     public FileGenerator(BlockingQueue<File> fileQueue) {
         this.fileQueue = fileQueue;
     }
-
     @Override
     public void run() {
         while (true) {
@@ -50,19 +46,16 @@ class FileGenerator extends Thread {
 class FileProcessor extends Thread {
     private final BlockingQueue<File> fileQueue;
     private final String fileType;
-
     public FileProcessor(BlockingQueue<File> fileQueue, String fileType) {
         this.fileQueue = fileQueue;
         this.fileType = fileType;
     }
-
     @Override
     public void run() {
         while (true) {
             try {
                 File file = fileQueue.take(); // Блокируем до получения файла
                 if (file.type.equals(fileType)) {
-
                     // Обработка файла
                     int processingTime = file.size * 7;
                     System.out.println("Обработка файла " + file + " ...");
@@ -83,12 +76,11 @@ class FileProcessor extends Thread {
 public class Task3 {
     private static final int MAX_QUEUE_SIZE = 5;
     public static void main(String[] args) {
+        // Будков Дмитрий ИКБО-01-21
         BlockingQueue<File> fileQueue = new ArrayBlockingQueue<>(MAX_QUEUE_SIZE);
-
         // Создание генератора файлов
         FileGenerator generator = new FileGenerator(fileQueue);
         generator.start();
-
         // Создание обработчиков для каждого типа файлов
         FileProcessor xmlProcessor = new FileProcessor(fileQueue, "XML");
         FileProcessor jsonProcessor = new FileProcessor(fileQueue, "JSON");
@@ -96,20 +88,18 @@ public class Task3 {
         xmlProcessor.start();
         jsonProcessor.start();
         xlsProcessor.start();
-
         try {
             // Даем системе поработать некоторое время
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
         // Завершение работы
         generator.interrupt();
         xmlProcessor.interrupt();
         jsonProcessor.interrupt();
         xlsProcessor.interrupt();
-
         System.out.println("Завершение работы системы.");
+        System.out.println("Будков Дмитрий ИКБО-01-21");
     }
 }
